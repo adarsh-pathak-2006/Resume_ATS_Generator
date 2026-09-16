@@ -9,6 +9,13 @@ class ResumeSerializer(ModelSerializer):
         fields='__all__'
         read_only_fields=['added_on']
 
+class ResumeDetailGetSerializer(ModelSerializer):
+    resume=ResumeSerializer(read_only=True)
+    user=UserGetSerializer(read_only=True)
+    class Meta:
+        model=ResponseDatabase
+        fields='__all__'
+
 class ResumeUploadSerializer(ModelSerializer):
     resume=PrimaryKeyRelatedField(queryset=Resume.objects.select_related('user').all())
     user=UserGetSerializer(read_only=True)

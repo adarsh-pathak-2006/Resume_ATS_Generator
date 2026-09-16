@@ -9,4 +9,4 @@ async def get_resume_response(resume, jd):
 async def get_resumeandcoverletter_response(resume, jd, companyinfo):
     prompt=prompt_genrate_resume_with_coverletter(main_resume=resume, jd=jd, company_info=companyinfo)
     response=await get_response(prompt=prompt)
-    return response
+    return {'resume':response.get('resume'), 'cover_letter':response.get('cover_letter')}
