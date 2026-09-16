@@ -1,7 +1,5 @@
-from django.shortcuts import get_object_or_404
 from .models import ResponseDatabase, Resume
 from .serializers import ResumeSerializer, ResumeUploadSerializer, ResumeDetailGetSerializer
-from authentication.serializers import UserGetSerializer
 from rest_framework.generics import ListCreateAPIView, ListAPIView, RetrieveAPIView
 from rest_framework.views import APIView
 from rest_framework.response import Response
@@ -44,4 +42,3 @@ class ResumeUploadAPI(APIView):
             serial.save(user=request.user, generated_resume=output.get('resume'), cover_letter=output.get('cover_letter'))
             return Response({'output':output}, status=201)
         return Response(serial.errors, status=400)
-
