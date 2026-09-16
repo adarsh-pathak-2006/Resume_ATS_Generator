@@ -2,7 +2,8 @@ from django.shortcuts import get_object_or_404
 from .models import ResponseDatabase, Resume
 from .serializers import ResumeSerializer, ResumeUploadSerializer
 from authentication.serializers import UserGetSerializer
-from rest_framework.generics import ListCreateAPIView
+from rest_framework.generics import ListCreateAPIView, ListAPIView
+from rest_framework.views import APIView
 from rest_framework.response import Response
 
 class ResumeAPI(ListCreateAPIView):
@@ -13,5 +14,14 @@ class ResumeAPI(ListCreateAPIView):
 
     def perform_create(self, serializer):
         serializer.save(user=self.request.user)
+
+class ResumeAnalyzeListAPI(ListAPIView):
+    serializer_class=ResumeUploadSerializer
+
+    def get_queryset(self):
+        return ResponseDatabase.objects.select_related('user', 'resume').filter(user=self.request.user)
+
+
+ 
 
 
