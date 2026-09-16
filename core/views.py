@@ -40,7 +40,7 @@ class ResumeAnalyseDetailAPI(RetrieveAPIView):
     def get_queryset(self):
         return ResponseDatabase.objects.select_related('user', 'resume').filter(user=self.request.user)
 
-class ResumeUploadAPI(APIView):
+class ResumeAnalysePostAPI(APIView):
     permission_classes=[IsAuthenticated]
     async def post(self, request, pk):
         serial=ResumeUploadSerializer(data=request.data)
