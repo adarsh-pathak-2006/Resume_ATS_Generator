@@ -42,17 +42,13 @@ class ResumeAnalyseDetailAPI(RetrieveAPIView):
 
 class ResumeAnalysePostAPI(APIView):
     permission_classes=[IsAuthenticated]
-    async def post(self, request, pk):
+    def post(self, request, pk):
         serial=ResumeUploadSerializer(data=request.data)
         if serial.is_valid():
             jd=serial.validated_data['job_description']
             about_company=serial.validated_data['about_company']
-            is_cover_letter_required=serial.validated_data.get("letter_requrired")
-            resume_data=resume_pdf_to_text.delay(pk)
-            if not is_cover_letter_required:
-                output=await get_resume_response(resume=resume_data, jd=jd)
-            else:
-                output=await get_resumeandcoverletter_response(resume=resume_data, jd=jd, companyinfo=about_company)
+            is_cover_letter_required=serial.validated_data.get("letter_required")
+            output=resume_pdf_to_text.delay(resumeid=pk, required=is_cover_letter_required, jd=jd, about_company=about_company)
             serial.save(user=request.user, generated_resume=output.get('resume'), cover_letter=output.get('cover_letter'))
             return Response({'output':output}, status=201)
         return Response(serial.errors, status=400)

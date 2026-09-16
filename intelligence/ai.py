@@ -3,7 +3,7 @@ from django.conf import settings
 
 client = genai.Client(api_key=settings.GEMINI_API_KEY)
 
-async def get_response(prompt):
+def get_response(prompt):
     response = client.models.generate_content(
     model='gemini-2.5-flash',
     contents=prompt

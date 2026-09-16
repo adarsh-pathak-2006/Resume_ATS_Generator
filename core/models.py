@@ -2,7 +2,8 @@ from django.db import models
 from django.contrib.auth.models import User
 
 class Resume(models.Model):
-    resume=models.FileField('resume-pdfs/')
+    user=models.ForeignKey(User, on_delete=models.CASCADE)
+    resume=models.FileField(upload_to='resume-pdfs/')
     added_on=models.DateTimeField(auto_now_add=True)
 
 class ResponseDatabase(models.Model):
