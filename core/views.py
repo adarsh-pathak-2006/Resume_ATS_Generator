@@ -48,7 +48,7 @@ class ResumeAnalysePostAPI(APIView):
             jd=serial.validated_data['job_description']
             about_company=serial.validated_data['about_company']
             is_cover_letter_required=serial.validated_data.get("letter_required")
-            data=ResponseDatabase.objects.create(user=request.user, resume=get_object_or_404(Resume, id=pk), job_despcription=jd, about_company=about_company, letter_required=serial.validated_data.get('is_cover_letter_required'))
-            output=resume_pdf_to_text.delay(db_id=data.id, required=is_cover_letter_required, jd=jd, about_company=about_company, user_data=request.user)
+            data=ResponseDatabase.objects.create(user=request.user, resume=get_object_or_404(Resume, id=pk), job_despcription=jd, about_company=about_company, letter_required=is_cover_letter_required)
+            output=resume_pdf_to_text.delay(data_id=data.id)
             return Response({'resume':output.get('resume'), 'cover_letter':output.get('cover_letter')}, status=201)
         return Response(serial.errors, status=400)
