@@ -1,0 +1,52 @@
+services:
+  - type: web
+    name: resume-ats-generator
+    env: python
+    buildCommand: "./build.sh"
+    startCommand: "gunicorn config.wsgi:application"
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.12.0
+      - key: DATABASE_URL
+        fromDatabase:
+          name: resume-ats-db
+          property: connectionString
+      - key: REDIS_URL
+        fromService:
+          type: redis
+          name: resume-ats-redis
+          property: connectionString
+      - key: SECRET_KEY
+        generateValue: true
+      - key: GEMINI_API_KEY
+        sync: false
+
+  - type: worker
+    name: celery-worker
+    env: python
+    buildCommand: pip install -r requirements.txt
+    startCommand: "celery -A config worker -l info"
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.12.0
+      - key: DATABASE_URL
+        fromDatabase:
+          name: resume-ats-db
+          property: connectionString
+      - key: REDIS_URL
+        fromService:
+          type: redis
+          name: resume-ats-redis
+          property: connectionString
+      - key: SECRET_KEY
+        generateValue: true
+      - key: GEMINI_API_KEY
+        sync: false
+
+databases:
+  - name: resume-ats-db
+    databaseName: resume_ats
+    user: resume_ats_user
+
+redis:
+  - name: resume-ats-redis

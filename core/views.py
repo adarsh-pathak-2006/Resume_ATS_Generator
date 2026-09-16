@@ -48,7 +48,7 @@ class ResumeAnalysePostAPI(APIView):
             jd=serial.validated_data['job_description']
             about_company=serial.validated_data['about_company']
             is_cover_letter_required=serial.validated_data.get("letter_required")
-            data=ResponseDatabase.objects.create(user=request.user, resume=get_object_or_404(Resume, id=pk), job_despcription=jd, about_company=about_company, letter_required=is_cover_letter_required)
+            data=ResponseDatabase.objects.create(user=request.user, resume=get_object_or_404(Resume, id=pk), job_description=jd, about_company=about_company, letter_required=is_cover_letter_required)
             output=resume_pdf_to_text.delay(data_id=data.id)
-            return Response({'resume':output.get('resume'), 'cover_letter':output.get('cover_letter')}, status=201)
+            return Response({'message': 'Processing in background', 'task_id': output.id, 'analysis_id': data.id}, status=202)
         return Response(serial.errors, status=400)

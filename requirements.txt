@@ -1,0 +1,12 @@
+Django>=5.0
+djangorestframework>=3.14
+djangorestframework-simplejwt>=5.3
+celery>=5.3
+redis>=5.0
+google-genai>=0.2.0
+pymupdf>=1.23
+python-dotenv>=1.0
+dj-database-url>=2.1
+psycopg2-binary>=2.9
+django-cors-headers>=4.3
+gunicorn>=21.2
