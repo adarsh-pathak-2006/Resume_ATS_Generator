@@ -12,7 +12,7 @@ class ResponseDatabase(models.Model):
     job_description=models.TextField()
     about_company=models.TextField()
     letter_required=models.BooleanField(default=True)
-    generated_resume=models.FileField(upload_to='generated_resume')
+    generated_resume=models.TextField(null=True)
     cover_letter=models.TextField(null=True)
     created_on=models.DateTimeField(auto_now_add=True)
 

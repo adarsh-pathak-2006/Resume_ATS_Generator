@@ -1,10 +1,10 @@
+from django.shortcuts import get_object_or_404
 from .models import ResponseDatabase, Resume
 from .serializers import ResumeSerializer, ResumeUploadSerializer
 from rest_framework.generics import ListCreateAPIView, ListAPIView, RetrieveAPIView, RetrieveUpdateDestroyAPIView
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from .tasks import resume_pdf_to_text
-from intelligence.response import get_resume_response, get_resumeandcoverletter_response
 from rest_framework.permissions import IsAuthenticated
 
 class ResumeAPI(ListCreateAPIView):
@@ -48,7 +48,7 @@ class ResumeAnalysePostAPI(APIView):
             jd=serial.validated_data['job_description']
             about_company=serial.validated_data['about_company']
             is_cover_letter_required=serial.validated_data.get("letter_required")
-            output=resume_pdf_to_text.delay(resumeid=pk, required=is_cover_letter_required, jd=jd, about_company=about_company)
-            serial.save(user=request.user, generated_resume=output.get('resume'), cover_letter=output.get('cover_letter'))
-            return Response({'output':output}, status=201)
+            data=ResponseDatabase.objects.create(user=request.user, resume=get_object_or_404(Resume, id=pk), job_despcription=jd, about_company=about_company, letter_required=serial.validated_data.get('is_cover_letter_required'))
+            output=resume_pdf_to_text.delay(db_id=data.id, required=is_cover_letter_required, jd=jd, about_company=about_company, user_data=request.user)
+            return Response({'resume':output.get('resume'), 'cover_letter':output.get('cover_letter')}, status=201)
         return Response(serial.errors, status=400)
