@@ -1,11 +1,12 @@
-from django.shortcuts import get_object_or_404
 from django.contrib.auth.models import User
 from .serializers import RegisterSerializer
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from django.db.models import Q
+from rest_framework.permissions import AllowAny
 
 class RegisterAPI(APIView):
+    permission_classes=[AllowAny]
     def post(self, request):
         serial=RegisterSerializer(data=request.data)
         if serial.is_valid():
