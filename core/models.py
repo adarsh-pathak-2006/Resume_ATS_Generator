@@ -10,6 +10,7 @@ class ResponseDatabase(models.Model):
     resume=models.ForeignKey(Resume, on_delete=models.CASCADE)
     job_description=models.TextField()
     about_company=models.TextField()
+    letter_required=models.BooleanField(default=True)
     generated_resume=models.FileField(upload_to='generated_resume')
     cover_letter=models.TextField(null=True)
     created_on=models.DateTimeField(auto_now_add=True)
