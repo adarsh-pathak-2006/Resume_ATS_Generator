@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # Start the Celery worker in the background
-celery -A config worker -l info &
+celery -A config worker -l info -c 1 &
 
 # Start the Django API via Gunicorn in the foreground
 # Render assigns a PORT env var (default 10000) — must bind to 0.0.0.0
