@@ -2,7 +2,7 @@ from django.db import models
 from django.contrib.auth.models import User
 
 class Resume(models.Model):
-    user=models.ForeignKey(User, on_delete=models.CASCADE)
+    user=models.ForeignKey(User, on_delete=models.CASCADE, null=True)
     resume=models.FileField(upload_to='resume-pdfs/')
     added_on=models.DateTimeField(auto_now_add=True)
 
