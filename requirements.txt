@@ -10,3 +10,4 @@ dj-database-url>=2.1
 psycopg2-binary>=2.9
 django-cors-headers>=4.3
 gunicorn>=21.2
+gevent>=23.9.1
